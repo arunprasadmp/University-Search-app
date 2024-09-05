@@ -1,0 +1,118 @@
+<mat-toolbar color="primary">
+  <h2>University Search App</h2>
+</mat-toolbar>
+<div class="search-container">
+  <mat-card>
+    
+
+    <!-- <div class="navigation">
+      <button mat-raised-button color="accent" routerLink="/favourites">Go to Favourites</button>
+    </div> -->
+    <div class="filter-controls">
+      <mat-form-field appearance="fill">
+        <mat-label>Country</mat-label>
+        <mat-select [(ngModel)]="selectedCountry" (selectionChange)="fetchUniversities()">
+          <!-- <mat-option value="Canada">Canada</mat-option>
+          <mat-option value="United States">United States</mat-option>
+          <mat-option value="United Kingdom">United Kingdom</mat-option> -->
+          <mat-option *ngFor="let country of countries" [value]="country.name">{{country.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Search</mat-label>
+        <input matInput [(ngModel)]="searchTerm" placeholder="Search by name" (input)="applyFilters()">
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="clearFilters()">Clear All Filters</button>
+      <button mat-raised-button color="accent" routerLink="/favourites">Go to Favourites</button>
+
+    </div>
+   
+    <div *ngIf="loading" class="spinner-container">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+    <!-- <mat-progress-spinner *ngIf="loading" mode="indeterminate"  class="loading-spinner"></mat-progress-spinner> -->
+
+    <table mat-table *ngIf="!loading" [dataSource]="filteredUniversities" class="mat-elevation-z8" >
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let university">{{university.name}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef>State/Province</th>
+        <td mat-cell *matCellDef="let university">{{university['state-province'] || 'N/A'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="website">
+        <th mat-header-cell *matHeaderCellDef>Website</th>
+        <td mat-cell *matCellDef="let university">
+          <a [href]="university.web_pages[0]" target="_blank">{{university.web_pages[0]}}</a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let university">
+          <button mat-icon-button (click)="toggleFavourite(university)">
+            <mat-icon>{{ isFavourite(university) ? 'favorite' : 'favorite_border' }}</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['name', 'state', 'website', 'actions']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['name', 'state', 'website', 'actions'];"></tr>
+    </table>
+    <div class="api-performance">
+      <p>API Status: {{ apiStatus }}</p>
+      <p>Response Time: {{ apiDuration }} ms</p>
+      <p *ngIf="errorMessage" class="error">Error: {{ errorMessage }}</p>
+    </div>
+  </mat-card>
+</div>
+
+<!--div class="search-container">
+    <div class="filter-controls">
+      <label for="country">Select Country:</label>
+      <select id="country" [(ngModel)]="selectedCountry" (change)="fetchUniversities()">
+        <option value="" disabled selected>Select Country</option>
+        <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>
+        
+      </select>
+  
+      <input type="text" placeholder="Search by name" [(ngModel)]="searchTerm" (input)="applyFilters()" />
+      <button (click)="clearFilters()">Clear All Filters</button>
+    </div>
+  
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>State/Province</th>
+          <th>Website</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let university of filteredUniversities">
+          <td>{{ university.name }}</td>
+          <td>{{ university['state-province'] }}</td>
+          <td><a [href]="university.web_pages[0]" target="_blank">{{ university.web_pages[0] }}</a></td>
+          <td>
+            <button (click)="toggleFavourite(university)">
+              {{ isFavourite(university) ? 'Remove from Favourites' : 'Add to Favourites' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div class="performance-metrics">
+      <p>API Response Code: {{ apiStatus }}</p>
+      <p>API Response Time: {{ apiDuration }} ms</p>
+    </div>
+  
+    <a routerLink="/favourites">Go to Favourites</a>
+  </div-->
+  
